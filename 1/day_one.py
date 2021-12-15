@@ -1,6 +1,4 @@
 
-
-
 def get_input_from_txt(filename):
     file = open(filename)
     report = []
@@ -11,7 +9,7 @@ def get_input_from_txt(filename):
 def print_number_of_increases(report):
     counter = 0
 
-    for i, number in enumerate(report[1:]):
+    for i, number in report[1:]:
         if number > report[i]:
             counter += 1
 
