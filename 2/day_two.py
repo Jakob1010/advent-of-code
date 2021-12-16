@@ -26,7 +26,7 @@ def print_number_of_increases(report):
 
 
 def main():
-    print('advent_of_code: day one')
+    print('advent_of_code: day two')
 
     # read reports (same as in 1)
     report_example = get_input_from_txt('../1/example_input.txt')

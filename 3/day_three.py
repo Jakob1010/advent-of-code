@@ -37,6 +37,8 @@ def compute_epsilon_gamma(report):
 
 
 def main():
+    print('advent_of_code: day three')
+    
     # compute example
     report = read_file('example_input.txt')
     compute_epsilon_gamma(report)
