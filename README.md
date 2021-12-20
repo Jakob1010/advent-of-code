@@ -1,4 +1,4 @@
-# advent-of-code :christmas_tree:
+# :christmas_tree: advent-of-code :christmas_tree:
 url: https://adventofcode.com/
 
 ## how to run
