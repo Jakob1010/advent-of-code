@@ -29,39 +29,34 @@ def read_map(filename):
 
 
 def find_distinct_ways(cave_map):
-    number_of_ways = 0
     start_points = cave_map['start']
     paths = []
 
     del cave_map['start']
 
     for cave in start_points:
-        number_of_ways += visit_cave(cave_map, cave,0,'start',paths, False)
+        visit_cave(cave_map, cave,'start',paths, False)
     
     #print(paths)
-    print('distinct ways: ', number_of_ways)
+    print('distinct ways: ', len(paths))
 
 
-def visit_cave(cave_map, cave, counter, visited, paths, double_visit):
+def visit_cave(cave_map, cave, visited, paths, double_visit):
     visited += ',' + cave
-    counter = 0
 
     if cave == 'end':
         paths.append(visited)
-        return 1
-
-    if cave not in cave_map:
+    elif cave not in cave_map:
         return 0
-
-    for c in cave_map[cave]:    
-        if not c.islower() or c not in visited: #or not double_visit:
-            #if c.islower() and c in visited:
-            #    double_visit = True
-            counter += visit_cave(cave_map, c, 0, visited, paths, double_visit)
-            
-            
-    return counter
-
+    else:
+        for c in cave_map[cave]:    
+            if not c.islower() or c not in visited or not double_visit:
+                if c.islower() and c in visited:
+                    double_visit = True
+                    visit_cave(cave_map, c, visited, paths, double_visit)
+                    double_visit = False
+                else:
+                    visit_cave(cave_map, c, visited, paths, double_visit)
 
 
 def main():
@@ -69,7 +64,7 @@ def main():
     print('--------------------------')
 
     # read input
-    cave_map = read_map('example_input_small.txt')
+    cave_map = read_map('test_input.txt')
 
     # compute number of distinct ways
     find_distinct_ways(cave_map)
