@@ -17,37 +17,68 @@ def read_polymer_template(filename):
 
     return polymer_mapper, polymer_template
 
+def count_characters(polymer_template):
+    pairs_counter = {}
+    letter_counter = {}
+
+    # count letters
+    for c in polymer_template:
+        if c in letter_counter:
+            letter_counter[c] += 1
+        else:
+            letter_counter[c] = 1
+
+    # count pairs
+    for i in range(0,len(polymer_template)-1):
+        pair = polymer_template[i]+polymer_template[i+1]
+
+        if pair in pairs_counter:
+            pairs_counter[pair] += 1
+        else:
+            pairs_counter[pair] = 1
+
+    return pairs_counter, letter_counter
 
 def insert_process(polymer_mapper, polymer_template, n):
-    template = polymer_template
-    templates = []
-
+    pairs_counter, letter_counter = count_characters(polymer_template)
+    
     for i in range(0,n):
-        temp = ''
-        for i in range(0,len(template)-1):
-            pair = template[i] + template[i+1]
-            insert = ''
-            if pair in polymer_mapper:
-                insert = polymer_mapper[pair]
-            temp += pair[0] + insert 
+        temp = {}
+        for pair, letter in polymer_mapper.items():
+            if pair in pairs_counter:
+                match_count = pairs_counter[pair]
 
-        temp += template[-1] # add last character
-        template = temp
-        temp = ''
-        templates.append(template)
+                first_pair = pair[0] + letter
+                second_pair = letter + pair[1]
 
-    return templates
+                if letter in letter_counter:
+                    letter_counter[letter] += match_count
+                else:
+                    letter_counter[letter] = match_count 
+                    
+                if first_pair in temp:
+                    temp[first_pair] += match_count
+                else:
+                    temp[first_pair] = match_count
+                
+                if second_pair in temp:
+                    temp[second_pair] += match_count
+                else:
+                    temp[second_pair] = match_count    
+
+        pairs_counter = temp
+                                     
+    return letter_counter
 
 def compute_most_and_least_frequent_character_sum(text):
-    text_freq = collections.Counter(text)
-    least_freq = 1000
+    least_freq = float("inf")
     most_freq = -1
 
-    for key, item in text_freq.items():
+    for key, item in text.items():
         least_freq = min(item,least_freq)
         most_freq = max(item, most_freq)
 
-    print('solution part 1: ', most_freq - least_freq)
+    print('solution: ', most_freq - least_freq)
 
 def main():
     print('advent_of_code: day fourteen')
@@ -58,11 +89,11 @@ def main():
 
 
     # insert characters 
-    templates = insert_process(polymer_mapper, polymer_template, 10)
+    letter_freq = insert_process(polymer_mapper, polymer_template, 40)
 
 
     # compute solution part 1
-    compute_most_and_least_frequent_character_sum(templates[-1])
+    compute_most_and_least_frequent_character_sum(letter_freq)
 
 
 if __name__ == "__main__":
